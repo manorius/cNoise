@@ -13,6 +13,7 @@
     body{
         width:100%;
         height:100%;
+        background-color:#e1d8cc;
     }
     canvas{
       z-index:100;
@@ -27,7 +28,7 @@
     </style>
 </head>
 <body>
-  <img src="crafted.jpg">
+ <!-- <img src="crafted.jpg"> -->
     <script src="simplex-noise.min.js"></script>
     <script src="paper-full.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -79,8 +80,10 @@ c.stroke();
 
 // Circle coordinates
 var circleCoor = [];
+// multiplier
+var m = 3;
 
-var radius = 50;
+var radius = 50*m;
 var angle = 0;
 
 for (var n = 0; n < 30; n++) {
@@ -106,7 +109,7 @@ var paths = [];
 for (var i = 3; i >= 0; i--) {
   var path = new Path();
   path.strokeColor = '#616161';
-  path.strokeWidth = 2;
+  path.strokeWidth = 2*m*0.5;
   path.closed = true;
   paths.push(path);
 };
@@ -119,10 +122,10 @@ var f = window.setInterval(function(){
 };
    // c.clearRect(0,0,canvas.width,canvas.height);
      
-var radius = 50;
+var radius = 50*m;
 var angle = 0;
 var mRepet = repetitions%6;
-var multiplier = (mRepet==0)? 20:2*mRepet;
+var multiplier = (mRepet==0)? 20*m:2*mRepet*m;
 
 //c.lineWidth = 1;
 //c.strokeStyle = "#CCCCCC"; // blue-ish color
@@ -131,13 +134,14 @@ var multiplier = (mRepet==0)? 20:2*mRepet;
 //c.moveTo(canvas.width / 2 + radius * Math.cos(0), canvas.height / 2);
 for (var i = paths.length - 1; i >= 0; i--) {
  
-//paths[i].add(new Point(720 + radius * Math.cos(0), 240));
+//paths[i].add(new Point((720) + radius * Math.cos(0), 240));
 
 for (var n = 0; n < 30; n++) {
 var simplex = new SimplexNoise(Math.random);
 // make a complete circle every 50 iterations
-angle += (Math.PI * 2) / 29;
-var sn = simplex.noise2D(circleCoor[n][0],circleCoor[n][1]);
+angle += (Math.PI * 2) / 30;
+var sn = simplex.noise2D(circleCoor[n][0],circleCoor[n][1])
+//var newRadius = radius+Math.abs(multiplier*sn);
 var newRadius = radius+map_range(sn, -1, 1, 0, multiplier);
 //console.log(multiplier*sn);
 var x = 720 + newRadius * Math.cos(angle);
@@ -184,11 +188,13 @@ view.onFrame = function(event) {};
 
  });
 
+// WHOLE PAGE HAS FINSIHED LOADING INCLUDING IMAGES ETC...
+ $( window ).load(function(){});
+
  function map_range(value, low1, high1, low2, high2) {
     return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
-// WHOLE PAGE HAS FINSIHED LOADING INCLUDING IMAGES ETC...
- $( window ).load(function(){});
+
 </script>
  
 </body>
