@@ -81,7 +81,7 @@ c.stroke();
 // Circle coordinates
 var circleCoor = [];
 // multiplier
-var m = 3;
+var m = 7;
 
 var radius = 50*m;
 var angle = 0;
@@ -145,7 +145,7 @@ var sn = simplex.noise2D(circleCoor[n][0],circleCoor[n][1])
 var newRadius = radius+map_range(sn, -1, 1, 0, multiplier);
 //console.log(multiplier*sn);
 var x = 720 + newRadius * Math.cos(angle);
-var y = 240 + newRadius * Math.sin(angle);
+var y = 490 + newRadius * Math.sin(angle);
 
 paths[i].add(new Point(x, y));
 //c.lineTo(x, y);
