@@ -13,7 +13,7 @@
     body{
         width:100%;
         height:100%;
-        background-color:#e1d8cc;
+        background-color:#ffffff;
     }
     canvas{
       z-index:100;
@@ -25,9 +25,34 @@
         left: 341px;
   top: 85px;
     }
+    #downloadlink
+    {
+    }
+    #export-tool
+    {
+      position:absolute;
+      right:0;
+      bottom:0;
+      padding:10px;
+      z-index:1000;
+    }
+    #export-svg
+    {
+      position:relative;
+      padding:5px;
+      background-color: red;
+      color:white;
+      cursor:pointer;
+    }
     </style>
 </head>
 <body>
+  <div id="export-tool">
+
+<a download="heartBeat-graphic.svg" id="downloadlink" style="display: none">Download</a>
+<a id="export-svg">Export</a><br />
+
+  </div>
  <!-- <img src="crafted.jpg"> -->
     <script src="simplex-noise.min.js"></script>
     <script src="paper-full.min.js"></script>
@@ -109,7 +134,7 @@ var paths = [];
 for (var i = 3; i >= 0; i--) {
   var path = new Path();
   path.strokeColor = '#616161';
-  path.strokeWidth = 2*m*0.5;
+  path.strokeWidth = 2*m;
   path.closed = true;
   paths.push(path);
 };
@@ -185,6 +210,35 @@ repetitions++;
 },100);
 
 view.onFrame = function(event) {};
+
+// PREPARING FILE FOR EXPORTING
+var textFile = null,
+  makeTextFile = function (text) {
+    var s = new XMLSerializer();
+    var d = text;
+    var str = s.serializeToString(d);
+    
+    var data = new Blob([str], {type: 'image/svg+xml'});
+
+    // If we are replacing a previously generated file we need to
+    // manually revoke the object URL to avoid memory leaks.
+    if (textFile !== null) {
+      window.URL.revokeObjectURL(textFile);
+    }
+
+    textFile = window.URL.createObjectURL(data);
+
+    return textFile;
+  };
+
+
+// EXPORT SVG AFTER ANIMATION
+$("#export-svg").click(function () {
+    var link = document.getElementById('downloadlink');
+    link.href = makeTextFile(project.exportSVG());
+    link.style.display = 'block';
+    $(this).hide();
+  })
 
  });
 
