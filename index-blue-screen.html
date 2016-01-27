@@ -27,6 +27,7 @@
     }
     #downloadlink
     {
+      display: block;
     }
     #export-tool
     {
@@ -63,6 +64,7 @@
 
 // CREATE CANVAS ELEMENT
 var canvas = document.createElement("canvas");
+var link = document.getElementById('downloadlink');
 
 canvas.width = $(document).width();
 canvas.height = $(document).height();
@@ -110,6 +112,7 @@ var m = 7;
 
 var radius = 50*m;
 var angle = 0;
+var frameNo = 0;
 
 for (var n = 0; n < 30; n++) {
 
@@ -178,32 +181,15 @@ rSeed++;
 }
 /*if(mRepet!=0)*/ paths[i].simplify(0);
 //c.stroke();
- 
+ // SAVE CURRENT FRAME
+//makeTextFile(project.exportSVG(),"frame_"+frameNo);
+//frameNo++;
+//
+
+
 };
 
-/*
-// RANDOM NOISE
 
-var radius = 50;
-var angle2 = 0;
-c.lineWidth = 2;
-c.strokeStyle = "#ff0000"; // blue-ish color
-c.beginPath();
-
-c.moveTo((canvas.width / 2)+200 + radius * Math.cos(0), (canvas.height / 2));
-
-for (var n1 = 0; n1 < 80; n1++) {
-
-// make a complete circle every 50 iterations
-angle2 += (Math.PI * 2) / 80;
-var randomRadius = radius+(2*Math.random())
-//console.log(n);
-var x = (canvas.width / 2)+200 + randomRadius * Math.cos(angle2);
-var y = (canvas.height / 2) + randomRadius * Math.sin(angle2);
-
-c.lineTo(x, y);
-}
-c.stroke();*/
 if(repetitions==stopAfter) clearInterval(f);
 repetitions++;
 
@@ -213,7 +199,7 @@ view.onFrame = function(event) {};
 
 // PREPARING FILE FOR EXPORTING
 var textFile = null,
-  makeTextFile = function (text) {
+  makeTextFile = function (text,filename) {
     var s = new XMLSerializer();
     var d = text;
     var str = s.serializeToString(d);
@@ -234,10 +220,12 @@ var textFile = null,
 
 // EXPORT SVG AFTER ANIMATION
 $("#export-svg").click(function () {
-    var link = document.getElementById('downloadlink');
-    link.href = makeTextFile(project.exportSVG());
-    link.style.display = 'block';
+    //link.href = makeTextFile(project.exportSVG());
     $(this).hide();
+    $(document).ready(function() {
+    var downloadUrl = makeTextFile(project.exportSVG());
+    setTimeout("window.location.assign('" + downloadUrl + "');", 1000);
+});
   })
 
  });
